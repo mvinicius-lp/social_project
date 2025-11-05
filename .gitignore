@@ -1,0 +1,75 @@
+# Ambientes virtuais
+venv/
+.env/
+.env.* 
+
+# Cache e compilados Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+*.out
+*.err
+
+# Arquivos temporários
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Pasta de build e distribuições
+build/
+dist/
+*.egg-info/
+.eggs/
+*.manifest
+*.spec
+
+# Banco local (se usar SQLite)
+*.db
+*.sqlite3
+
+# Arquivos de configuração sensíveis
+.env
+.env.local
+.env.development
+.env.production
+*.key
+*.pem
+
+# VSCode
+.vscode/
+.history/
+.settings/
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+*.pid
+*.seed
+*.stackdump
+
+.coverage
+htmlcov/
+pytest_cache/
+.tox/
+.mypy_cache/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+
+docker-compose.override.yml
+.docker/
+*.tar
