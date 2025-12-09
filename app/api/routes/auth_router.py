@@ -7,12 +7,12 @@ from app.application.use_cases.logout_user_usecase import LogoutUserUseCase
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 @router.post("/register")
-async def register(name: str, email: str, password: str):
+async def register(name: str, email: str, password: str, funcao: str):
     repo = UserRepositoryImpl()
     usecase = RegisterUserUseCase(repo)
     try:
-        user = await usecase.execute(name, email, password)
-        return {"id": user.id, "email": user.email}
+        user = await usecase.execute(name, email, password, funcao)
+        return {"id": user.id, "email": user.email, "funcao": user.funcao}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
