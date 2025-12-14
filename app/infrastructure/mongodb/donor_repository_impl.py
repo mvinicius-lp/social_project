@@ -20,8 +20,19 @@ class DonorRepositoryImpl(IDonorRepository):
             del item["_id"]
             donors.append(Donor(**item))
         return donors
-    from bson import ObjectId
+
+    async def find_by_email(self, email: str):
+        data = await self.collection.find_one({"email": email})
+        if not data:
+            return None
+        data["id"] = str(data["_id"])
+        del data["_id"]
+        return Donor(**data)
 
     async def delete_by_email(self, email: str) -> bool:
         result = await self.collection.delete_one({"email": email})
         return result.deleted_count > 0
+    
+    async def count_all(self):
+        return await self.collection.count_documents({})
+

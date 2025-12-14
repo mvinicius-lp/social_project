@@ -14,3 +14,7 @@ class IDonorRepository(ABC):
     @abstractmethod
     async def delete_by_email(self, email: str) -> bool:
         pass
+
+    @abstractmethod
+    async def find_by_email(self, email: str):
+        pass

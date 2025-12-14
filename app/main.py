@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import auth_router
 from app.api.routes.donor_router import router as donor_router
+from app.api.routes.donation_router import router as donation_router
+from app.api.routes.dashboard_router import router as dashboard_router
+
 
 app = FastAPI(title="API Extensão")
 
@@ -16,6 +19,8 @@ app.add_middleware(
 
 app.include_router(auth_router.router)
 app.include_router(donor_router)
+app.include_router(donation_router)
+app.include_router(dashboard_router)
 
 @app.get("/")
 def root():
