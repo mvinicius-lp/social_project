@@ -35,4 +35,9 @@ class DonorRepositoryImpl(IDonorRepository):
     
     async def count_all(self):
         return await self.collection.count_documents({})
+    
+    async def find_by_name(self, name: str):
+        data = await self.collection.find_one({"nome": name})
+        return Donor(**data) if data else None
+
 

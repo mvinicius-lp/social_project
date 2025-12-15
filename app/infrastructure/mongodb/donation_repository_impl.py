@@ -49,3 +49,13 @@ class DonationRepositoryImpl(IDonationRepository):
             "date": {"$gte": first_day}
         })
 
+    async def create_negative(self, donor_email: str, value: float, date: datetime, description: str):
+        doc = {
+            "donor_email": donor_email,
+            "value": -abs(value),   # sempre negativo
+            "date": date,
+            "description": description,
+            "type": "Aplicação"
+        }
+        result = await self.collection.insert_one(doc)
+        return str(result.inserted_id)

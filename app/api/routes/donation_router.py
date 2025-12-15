@@ -48,14 +48,20 @@ async def list_donations():
     formatted = []
 
     for d in donations:
-        donor_email = d["donor_email"]
 
+        # -----------------------------
+        # FILTRA SOMENTE DOAÇÕES POSITIVAS
+        # -----------------------------
+        if float(d["value"]) <= 0:
+            continue
+
+        donor_email = d["donor_email"]
         donor = await donor_repo.find_by_email(donor_email)
-        donor_name = donor.nome if donor else donor_email  
+        donor_name = donor.nome if donor else donor_email
 
         formatted.append({
             "id": d["id"],
-            "donor": donor_name,               
+            "donor": donor_name,
             "date": d["date"].strftime("%d/%m/%Y"),
             "type": d["type"],
             "description": d.get("description", ""),

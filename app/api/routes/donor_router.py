@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
+from app.infrastructure.mongodb.donation_repository_impl import DonationRepositoryImpl
 from app.infrastructure.mongodb.donor_repository_impl import DonorRepositoryImpl
 from app.application.use_cases.register_donor_usecase import RegisterDonorUseCase
 from app.application.use_cases.list_donors_usecase import ListDonorsUseCase
@@ -53,6 +54,7 @@ async def list_donors():
         for d in donors
     ]
 
+
 @router.delete("/{email}")
 async def delete_donor(email: str):
     repo = DonorRepositoryImpl()
@@ -64,3 +66,41 @@ async def delete_donor(email: str):
         return {"deleted": False, "message": "Doador não encontrado"}
 
     return {"deleted": True, "message": "Doador removido com sucesso"}
+
+
+@router.get("/with-values")
+async def donors_with_values():
+    donor_repo = DonorRepositoryImpl()
+    donation_repo = DonationRepositoryImpl()
+
+    donors = await donor_repo.list_all()
+    results = []
+
+    for d in donors:
+
+        # Soma tudo: positivo e negativo
+        pipeline = [
+            {"$match": {"donor_email": d.email}},
+            {
+                "$group": {
+                    "_id": None,
+                    "total": {
+                        "$sum": { "$toDouble": "$value" }  # <- resolve tudo
+                    }
+                }
+            }
+        ]
+
+        agg = await donation_repo.collection.aggregate(pipeline).to_list(1)
+        saldo = float(agg[0]["total"]) if agg else 0
+
+        # Apenas mostrar quem tem saldo disponível positivo
+        if saldo > 0:
+            results.append({
+                "nome": d.nome,
+                "value": saldo
+            })
+
+    return results
+
+
